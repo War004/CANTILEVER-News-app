@@ -16,7 +16,8 @@ data class NewsUiState(
     val totalResults: Int = 0,
     val currentPage: Int = 1,
     val errorMessage: String? = null,
-    val isLoadingMore: Boolean = false
+    val isLoadingMore: Boolean = false,
+    val query: String = "Breaking News"
 )
 
 class NewsViewModel(
@@ -31,7 +32,7 @@ class NewsViewModel(
 
     init {
         // Load initial news content when the ViewModel is created
-        searchNews("Android")
+        searchNews(_uiState.value.query)
     }
 
     fun searchNews(
@@ -59,7 +60,8 @@ class NewsViewModel(
                                         isLoading = false,
                                         articles = response.articles,
                                         totalResults = response.totalResults,
-                                        currentPage = 1
+                                        currentPage = 1,
+                                        query = query
                                     )
                                 }
                             }
@@ -108,7 +110,8 @@ class NewsViewModel(
                                         isLoadingMore = false,
                                         // Append the new articles to the existing list
                                         articles = it.articles + response.articles,
-                                        currentPage = nextPage
+                                        currentPage = nextPage,
+                                        query = currentQuery
                                     )
                                 }
                             }

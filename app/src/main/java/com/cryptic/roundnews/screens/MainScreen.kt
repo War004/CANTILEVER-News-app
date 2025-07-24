@@ -30,7 +30,6 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -43,6 +42,7 @@ import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
 import com.cryptic.roundnews.api.response.Source
 import com.cryptic.roundnews.ui.theme.RoundNewsTheme
+import androidx.core.net.toUri
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,7 +52,7 @@ fun NewsScreen(viewModel: NewsViewModel) {
     val focusManager = LocalFocusManager.current
 
     // State for the text field
-    var query by remember { mutableStateOf("") }
+    var query by remember { mutableStateOf("Breaking news") }
     // State to track the selected category chip
     var selectedCategory by remember { mutableStateOf<String?>(null) }
     val categories = listOf("business", "entertainment", "health", "science", "sports", "technology")
@@ -260,7 +260,7 @@ fun NewsArticleItem(article: Article) {
                 val builder = CustomTabsIntent.Builder()
                 val customTabsIntent = builder.build()
                 try {
-                    customTabsIntent.launchUrl(context, Uri.parse(article.url))
+                    customTabsIntent.launchUrl(context, article.url.toUri())
                 } catch (e: Exception) {
                     Log.e("NewsArticleItem", "Failed to open URL ${article.url}: ${e.message}")
                     Toast.makeText(
